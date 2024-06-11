@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Output, output } from '@angular/core';
 import { CapitalizePipe } from '../utils/capitalize.pipe';
 import { faArrowDownLong, faArrowUpLong } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -16,13 +16,13 @@ type SortDirection = "Asc" | "Desc" | "None";
       <tr>
         <th *ngFor="let col of columns">
           <div class="text-3xl text-gray-800 flex flex-row justify-center items-center cursor-pointer"> 
-            <div (click)="applySortBy(col)"> {{ col | capitalize : "titleCase" }} </div>
+            <div (click)="applySortBy(col)" class="hover:text-blue-600"> {{ col | capitalize : "titleCase" }} </div>
           </div>
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr class="border border-l-1 text-center text-lg" *ngFor="let row of data" >
+      <tr  class="border border-l-1 text-center text-lg cursor-pointer hover:bg-gray-200" *ngFor="let row of data" (click)="selectRow(row)" >
         <td *ngFor="let col of columns" class="p-2" >{{ row[col] }}</td>
       </tr>
     </tbody>
@@ -30,12 +30,15 @@ type SortDirection = "Asc" | "Desc" | "None";
 `,
 })
 export class DynamicTableComponent implements OnInit {
+  
   @Input({required: true}) data: any[] = [];
+  
   iconUp = faArrowDownLong
   iconDown = faArrowUpLong
   columns :  string[]  = []
   sortby: string = ""
   sortDirection: SortDirection = "Asc"
+  rowSelected = output<any>();
 
   ngOnInit() {
     this.columns = this.processColumns();
@@ -78,8 +81,8 @@ export class DynamicTableComponent implements OnInit {
     }
     this.data.reverse();
   }
-
-
-
+  selectRow(row: any): void {
+    this.rowSelected.emit(row);
+  }
 
 }
