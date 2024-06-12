@@ -35,7 +35,7 @@ type SortDirection = 'Asc' | 'Desc' | 'None';
       </thead>
       <tbody>
         <tr
-          class="border border-l-1 text-center text-lg cursor-pointer hover:bg-gray-200"
+          class="border border-l-1 text-center text-lg cursor-pointer hover:text-blue-600 hover:bg-gray-200"
           *ngFor="let row of data"
           (click)="selectRow(row)"
         >
